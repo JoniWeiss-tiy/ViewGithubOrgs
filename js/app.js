@@ -4,7 +4,7 @@ function displayOutput(orgListOutput) {
   document.querySelector('#output').innerHTML = orgListOutput;
 }
 
-function buildOrgOutput(orglist) {
+function buildOrgOutput(orglist, user) {
   let outputMsg = '';
   for (var i = 0; i < orglist.length; i++) {
     for (el in orglist[i]) {
@@ -16,12 +16,22 @@ function buildOrgOutput(orglist) {
       }
     }
   }
-  displayOutput(outputMsg);
+    displayOutput(outputMsg);
 }
 
-function getGithubOrgs() {
-  let gitHubOrgs = $.get('https://api.github.com/users/jisaacks/orgs')
-      .done(function(data) {
-        buildOrgOutput(data);
-      });
+function getGithubOrgs(id) {
+  let user = document.querySelector('#user').value;
+  if (user) {
+    $.get('https://api.github.com/users/' + user + '/orgs')
+        .done(function(data) {
+          buildOrgOutput(data);
+          console.log("User: ", user);
+        });
+  } else {
+    let gitHubOrgs = $.get('https://api.github.com/users/jisaacks/orgs')
+    .done(function(data) {
+      buildOrgOutput(data);
+      console.log("User:", user);
+    });
+  }
 }
